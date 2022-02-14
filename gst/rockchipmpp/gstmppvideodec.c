@@ -178,12 +178,12 @@ gst_mpp_video_dec_send_mpp_packet (GstVideoDecoder * decoder,
     MppPacket mpkt, gint timeout_ms)
 {
   GstMppDec *mppdec = GST_MPP_DEC (decoder);
-  gint interval_ms = 2;
+  gint interval_ms = 500;
   MPP_RET ret;
 
   do {
     ret = mppdec->mpi->decode_put_packet (mppdec->mpp_ctx, mpkt);
-    if (!ret) {
+    if ((!ret) && (MPP_ERR_BUFFER_FULL != ret)) {
       mpp_packet_deinit (&mpkt);
       return TRUE;
     }
